@@ -1,4 +1,4 @@
-import {Body, Controller, Post } from '@nestjs/common';
+import {Body, Controller, Get, Post } from '@nestjs/common';
 import { UsuarioRepository } from './usuario.repository';
 
 @Controller('/usuarios')
@@ -12,4 +12,10 @@ async criaUsuario(@Body() dadosDoUsuario) {
      return dadosDoUsuario;
      }
 
+ 
+
+     @Get()
+    async listUsuarios() {
+    return this.usuarioRepository.listar()
+    }
 }

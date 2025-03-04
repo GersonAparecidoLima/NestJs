@@ -1,12 +1,13 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
-import { UsuarioRepository } from "../usuario.repository";
-import { CriaUsuarioDTO } from "../dto/CriaUsuario.dto";
-import { UsuarioEntity } from "../usuario.entity";
-import { randomUUID } from "crypto";
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { UsuarioRepository } from '../usuario.repository';
+import { UsuarioEntity } from '../usuario.entity';
+import { CriaUsuarioDTO } from '../dto/CriaUsuario.dto';
+import { randomUUID } from 'crypto'; // Importando o método para gerar UUID
 
 @Injectable()
 export class UsuarioService {
   constructor(private readonly usuarioRepository: UsuarioRepository) {}
+
 
   async criar(dadosUsuario: CriaUsuarioDTO): Promise<UsuarioEntity> {
    
@@ -21,7 +22,7 @@ export class UsuarioService {
     // Salvando o usuário no repositório
     return this.usuarioRepository.salvar(usuario);
   }
-
+  
   async listar() {
     return this.usuarioRepository.listar();
   }
@@ -37,5 +38,5 @@ export class UsuarioService {
   async remover(id: string) {
     return this.usuarioRepository.remove(id);
   }
-
+    
 }

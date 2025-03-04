@@ -14,7 +14,11 @@ export class ProdutoRepository {
     return dadosProduto;
   }
 
-  private buscaPorId(id: string) {
+  async buscaPorId(id: string): Promise<ProdutoEntity | null> {
+    return this.produtos.find((produto) => produto.id === id) || null;
+  }
+
+  /*private buscaPorId(id: string) {
     const possivelProduto = this.produtos.find((produto) => produto.id === id);
 
     if (!possivelProduto) {
@@ -22,7 +26,7 @@ export class ProdutoRepository {
     }
 
     return possivelProduto;
-  }
+  }*/
 
   async atualiza(id: string, dadosProduto: Partial<ProdutoEntity>) {
     const dadosNaoAtualizaveis = ['id', 'usuarioId'];

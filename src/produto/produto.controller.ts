@@ -7,63 +7,31 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { randomUUID } from 'crypto';
-
-import { AtualizaProdutoDTO } from './dto/atualizaProduto.dto';
+import { ProdutoService } from './Service/produto.service';
 import { CriaProdutoDTO } from './dto/CriaProduto.dto';
-import { ProdutoEntity } from './produto.entity';
-import { ProdutoRepository } from './produto.repository';
+import { AtualizaProdutoDTO } from './dto/atualizaProduto.dto';
 
 @Controller('produtos')
 export class ProdutoController {
-  constructor(private readonly produtoRepository: ProdutoRepository) {}
+  constructor(private readonly produtoService: ProdutoService) {}
 
   @Post()
   async criaNovo(@Body() dadosProduto: CriaProdutoDTO) {
-    const produto = new ProdutoEntity();
-
-    produto.id = randomUUID();
-    produto.nome = dadosProduto.nome;
-    produto.usuarioId = dadosProduto.usuarioId;
-    produto.valor = dadosProduto.valor;
-    produto.quantidade = dadosProduto.quantidade;
-    produto.descricao = dadosProduto.descricao;
-    produto.categoria = dadosProduto.categoria;
-    produto.caracteristicas = dadosProduto.caracteristicas;
-    produto.imagens = dadosProduto.imagens;
-
-    const produtoCadastrado = this.produtoRepository.salva(produto);
-    return produtoCadastrado;
+    return this.produtoService.criar(dadosProduto);
   }
 
   @Get()
   async listaTodos() {
-    return this.produtoRepository.listaTodos();
+    return this.produtoService.listarTodos();
   }
 
   @Put('/:id')
-  async atualiza(
-    @Param('id') id: string,
-    @Body() dadosProduto: AtualizaProdutoDTO,
-  ) {
-    const produtoAlterado = await this.produtoRepository.atualiza(
-      id,
-      dadosProduto,
-    );
-
-    return {
-      mensagem: 'produto atualizado com sucesso',
-      produto: produtoAlterado,
-    };
+  async atualiza(@Param('id') id: string, @Body() dadosProduto: AtualizaProdutoDTO) {
+    return this.produtoService.atualizar(id, dadosProduto);
   }
 
   @Delete('/:id')
   async remove(@Param('id') id: string) {
-    const produtoRemovido = await this.produtoRepository.remove(id);
-
-    return {
-      mensagem: 'produto removido com sucesso',
-      produto: produtoRemovido,
-    };
+    return this.produtoService.remover(id);
   }
 }
